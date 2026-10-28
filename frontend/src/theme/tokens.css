@@ -1,0 +1,68 @@
+/*
+ * Design tokens distilled from `Acme-proposal-signed-2026-09-12.html` (§21.2).
+ *
+ * The deck itself is NOT imported: it is a fixed 1920x1080 stage driven by
+ * absolute positioning and a JS scaler. Only the custom properties and the
+ * type scale travel into the app, and the components are re-implemented against
+ * them so the two stay visually identical.
+ *
+ * This file is the single source of truth for colour. Components must never
+ * type a hex value; Tailwind's colour names all resolve to these variables.
+ */
+
+:root {
+  /* --- Core palette, verbatim from the deck ---------------------------- */
+  --bg: #0a0a0a;
+  --panel: #111111;
+  --panel-2: #171717;
+  --ink: #f5f3ee;
+  --muted: #9a9a94;
+  --line: rgba(245, 243, 238, 0.14);
+  --accent: #c9ff4a;
+  --accent-2: #8fe35d;
+  --warm: #f3c969;
+  --danger: #ff7d6e;
+  --shadow: 0 30px 80px rgba(0, 0, 0, 0.38);
+
+  /* --- Supporting greys promoted to tokens ----------------------------- */
+  --meta: #77776f; /* eyebrow / kicker meta */
+  --meta-2: #6e6e67; /* footers, fine print */
+  --body-2: #8a8a82; /* secondary body, draft/disabled */
+
+  /* --- Surfaces used at reduced opacity (panels float over the orbs) --- */
+  --panel-fill: rgba(17, 17, 17, 0.88);
+  --field-fill: rgba(255, 255, 255, 0.04);
+  --ghost-fill: rgba(201, 255, 74, 0.06);
+  --ghost-border: rgba(201, 255, 74, 0.28);
+
+  /* --- Radius scale (§21.7) ------------------------------------------- */
+  --radius-panel: 28px;
+  --radius-card: 18px;
+  --radius-input: 9px;
+  --radius-button: 11px;
+
+  /* --- Motion (§21.5) -------------------------------------------------- */
+  --rise-duration: 0.8s;
+  --rise-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --stagger: 0.08s;
+}
+
+/*
+ * Reduced motion collapses entrance animations exactly as the deck does. Data
+ * refreshes never re-animate regardless (see Panel), so nothing here hides
+ * information from a user who opted out of motion.
+ */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --rise-duration: 0.01ms;
+    --stagger: 0ms;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.2s !important;
+  }
+}

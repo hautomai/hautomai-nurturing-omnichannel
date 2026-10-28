@@ -1,0 +1,111 @@
+name: cross-channel-nurture
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: nurture
+      POSTGRES_PASSWORD: nurture
+      POSTGRES_DB: nurture
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nurture -d nurture"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # Local mail catcher. Used when CHANNEL_MODE=real so SMTP sends can be eyeballed
+  # without touching a real inbox. UI on http://localhost:8025
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    profiles: ["mail"]
+
+  api:
+    build:
+      context: ./backend
+    command: >
+      sh -c "uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+    environment:
+      APP_ENV: development
+      AUTO_CREATE_TABLES: "true"
+      SEED_ON_STARTUP: "true"
+      DATABASE_URL: postgresql+psycopg://nurture:nurture@postgres:5432/nurture
+      REDIS_URL: redis://redis:6379/0
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  worker:
+    build:
+      context: ./backend
+    command: celery -A app.workers.celery_app:celery_app worker -l info --concurrency=4
+    environment:
+      APP_ENV: development
+      DATABASE_URL: postgresql+psycopg://nurture:nurture@postgres:5432/nurture
+      REDIS_URL: redis://redis:6379/0
+    env_file:
+      - .env
+    volumes:
+      - ./backend:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  beat:
+    build:
+      context: ./backend
+    command: celery -A app.workers.celery_app:celery_app beat -l info
+    environment:
+      APP_ENV: development
+      DATABASE_URL: postgresql+psycopg://nurture:nurture@postgres:5432/nurture
+      REDIS_URL: redis://redis:6379/0
+    env_file:
+      - .env
+    volumes:
+      - ./backend:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  web:
+    image: node:20-alpine
+    working_dir: /app
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    environment:
+      VITE_API_BASE_URL: http://localhost:8000
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+volumes:
+  pgdata:

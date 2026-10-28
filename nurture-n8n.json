@@ -1,0 +1,560 @@
+{
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "605bb767-8f3a-4c60-af61-41b1e9fb070d",
+      "name": "When clicking ‘Execute workflow’",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        -2832,
+        -64
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Node Name: Fetch Contacts from HighLevel\n**Action**: Retrieves all contacts from the HighLevel CRM.\n**Description**:\nThis node connects to the HighLevel API using OAuth credentials and fetches all contacts. It pulls data such as contact names, email addresses, and other related metadata to be processed in subsequent steps.\n",
+        "height": 352
+      },
+      "id": "e790fc06-f769-4ce0-9164-747721a9c059",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2656,
+        -448
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Node Name: Validate Deal Fetch Success\n**Action**: Validates if the deal fetch was successful or not.\n**Description**:\nThis node checks whether the fetched data (deal or contact) exists. If the data is invalid or missing, it logs an error or redirects to error handling.\n",
+        "height": 272
+      },
+      "id": "39d140c2-4127-49ae-b8e8-6e9a5929c68a",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2384,
+        128
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Node Name: Log Errors in Google Sheets\n**Action**: Logs any errors encountered during data fetching or validation.\n**Description**:\nThis node logs any errors or issues that occur during the fetching or validation steps into a Google Sheet for auditing and future reference. It ensures that all issues are recorded for troubleshooting.\n",
+        "height": 336
+      },
+      "id": "59ee8df7-c67a-45d6-abaf-1a04cf031383",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2048,
+        560
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Node Name: Filter Contacts with No Response\n**Action**: Filters contacts who have not responded in the last 24 hours.\n**Description**:\nThis node processes the input contacts and filters out those who have not replied to recent communications within the last 24 hours. It calculates the time difference and selects only contacts who have been inactive for a specified period.\n",
+        "height": 352
+      },
+      "id": "57c21ac1-38eb-4b60-b9aa-f70d7770e7a7",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2048,
+        -448
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Node Name: Get Most Recent Contact\n**Action**: Retrieves the most recent contact based on the last updated date.\n**Description**:\nThis node sorts the contacts by their most recent update and selects the one with the latest activity. It also calculates the number of hours since the last update and formats it for easy communication.\n",
+        "height": 336
+      },
+      "id": "500904d8-683d-41fa-a80d-d59d85e2bd7c",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1776,
+        96
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Node Name: Send Follow-Up Email to Contact\n**Action**: Sends a follow-up email to a contact.\n**Description**:\nThis node sends a personalized follow-up email to the selected contact. The email asks for confirmation and offers help in case the contact has any further questions or concerns.\n",
+        "height": 320
+      },
+      "id": "5ece5ddb-c76c-4f4a-9bf5-64318be8a764",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1536,
+        -400
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Node Name: Wait for 24 Hours Before Next Action\n**Action**: Pauses the workflow for 24 hours before continuing.\n**Description**:\nThis node introduces a 24-hour delay in the workflow. It is typically used when waiting for a response or allowing some time before the next step in the automation process is triggered.\n",
+        "height": 304
+      },
+      "id": "6f4a309a-b8b2-4f67-a495-73ed06906869",
+      "name": "Sticky Note6",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1280,
+        112
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Node Name: Retrieve Email Thread for Response\n**Action**: Fetches the email thread based on the provided thread ID.\n**Description**:\nThis node retrieves the most recent email thread from Gmail using the thread ID. It's used for checking if the contact has responded and fetching the necessary email data for processing.\n",
+        "height": 368
+      },
+      "id": "c170f726-846d-4f17-b879-61f4feee3fc0",
+      "name": "Sticky Note7",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1088,
+        -480
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Node Name: Check If Contact Responded with 'Yes'\n**Action**: Evaluates if the email response contains the word \"yes\".\n**Description**:\nThis node checks the email response content for the keyword \"yes\". If found, it signals that the contact has replied positively, triggering the appropriate follow-up action.\n",
+        "height": 384
+      },
+      "id": "c336e4c0-d8ca-4dc4-aefc-125f6b6c8772",
+      "name": "Sticky Note8",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -848,
+        96
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Node Name: Notify Sales Team in Slack if No Response\n**Action**: Sends a notification to Slack if no response has been received from the contact.\n**Description**:\nIf no response has been received from the contact, this node notifies the sales team via Slack. It includes relevant details such as the contact's email and follow-up status, so the team can take the next steps.\n",
+        "height": 400
+      },
+      "id": "b69be89d-b351-4b1f-b1ee-2ca9661301a7",
+      "name": "Sticky Note9",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -544,
+        256
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Node Name: Notify Sales Team in Slack if Response Received\n**Action**: Sends a notification to Slack if a response is received from the contact.\n**Description**:\nIf the contact responds positively (i.e., the email contains \"yes\"), this node notifies the sales team in Slack, highlighting the response and providing further details for the next action.\n",
+        "height": 384
+      },
+      "id": "57172a02-fa5a-47eb-ae7f-c9a2ac752892",
+      "name": "Sticky Note10",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -560,
+        -688
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "filters": {},
+        "options": {},
+        "requestOptions": {}
+      },
+      "id": "a3b35084-8caa-4839-835d-4d13a2b1115b",
+      "name": "Fetch Contacts from HighLevel",
+      "type": "n8n-nodes-base.highLevel",
+      "position": [
+        -2576,
+        -64
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "e2adb005-2b3c-4d1e-8445-442df1fe925a",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.id }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3bd97a88-2113-45f5-9e7f-1fc9b21f0913",
+      "name": "Validate Deal Fetch Success",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        -2304,
+        -64
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "1Uldk_4BxWbdZTDZxFUeohIfeBmGHHqVEl9Ogb0l6R8Y",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Uldk_4BxWbdZTDZxFUeohIfeBmGHHqVEl9Ogb0l6R8Y/edit?usp=drivesdk",
+          "cachedResultName": "Interviewer Brief Pack "
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": 1338537721,
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Uldk_4BxWbdZTDZxFUeohIfeBmGHHqVEl9Ogb0l6R8Y/edit#gid=1338537721",
+          "cachedResultName": "error log sheet"
+        },
+        "columns": {
+          "value": {},
+          "schema": [
+            {
+              "id": "error_id",
+              "type": "string",
+              "display": true,
+              "removed": false,
+              "required": false,
+              "displayName": "error_id",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "error",
+              "type": "string",
+              "display": true,
+              "removed": false,
+              "required": false,
+              "displayName": "error",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            }
+          ],
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "error_id"
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "dc6460a8-a62e-452a-b138-4efe9a8a1da8",
+      "name": "Log Errors in Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        -1984,
+        368
+      ],
+      "typeVersion": 4.6
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get all contacts from the input\nconst contacts = $input.all().map(item => item.json);\n\n// Get the current date and time\nconst now = new Date();\n\n// Filter contacts with no response in the last 24 hours\nconst contactsWithNoResponse = contacts.filter(contact => {\n  const lastResponseTime = new Date(contact.dateUpdated);\n\n  // Calculate the time difference in hours\n  const timeDiff = now - lastResponseTime; \n  const timeDiffInHours = timeDiff / (1000 * 60 * 60);\n\n  // Check if no response in the last 24 hours\n  return timeDiffInHours >= 24; \n});\n\n// Return the filtered contacts as separate items\nreturn contactsWithNoResponse.map(contact => ({\n  json: contact\n}));"
+      },
+      "id": "59560c41-fbba-478a-b5bb-a3ca976f8d03",
+      "name": "Filter Contacts with No Response",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -1968,
+        -64
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get all contacts from the input\nconst contacts = $input.all().map(item => item.json);\n\n// Sort contacts by dateUpdated (most recent first)\nconst sortedContacts = contacts.sort((a, b) => {\n  return new Date(b.dateUpdated) - new Date(a.dateUpdated);\n});\n\n// Get the most recent contact\nconst mostRecentContact = sortedContacts[0];\n\n// Calculate hours ago\nconst now = new Date();\nconst lastUpdated = new Date(mostRecentContact.dateUpdated);\nconst timeDiff = now - lastUpdated;\nconst hoursAgo = Math.floor(timeDiff / (1000 * 60 * 60));\n\n// Format the output\nconst formattedOutput = `${mostRecentContact.contactName} (${mostRecentContact.email || 'no email'}) - \\`dateUpdated: \"${mostRecentContact.dateUpdated}\"\\`\n* That's ~${hoursAgo} hours ago ✅`;\n\n// Return the formatted output\nreturn [\n  {\n    json: {\n      mostRecentContact: mostRecentContact,\n      formattedOutput: formattedOutput,\n      hoursAgo: hoursAgo,\n      contactName: mostRecentContact.contactName,\n      email: mostRecentContact.email,\n      dateUpdated: mostRecentContact.dateUpdated\n    }\n  }\n];\n"
+      },
+      "id": "8e946d9e-b749-4229-8fca-ea4b2b2a7f72",
+      "name": "Get Most Recent Contact",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -1712,
+        -64
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "sendTo": "=contact@example.com",
+        "subject": "=Just Checking In - {{ $json.contactName }}",
+        "message": "=<p>Hi {{ $json.firstName || $json.contactName }},</p>\n\n<p>I hope this email finds you well!</p>\n\n<p>I wanted to follow up with you as I noticed we haven't heard back from you in the last {{ $json.hoursAgo }} hours (since {{ $json.dateUpdated }}).</p>\n\n<p>Just checking in to see if you had any questions or if there's anything I can help you with?</p>\n\n<p>Looking forward to hearing from you! Replay to \" yes \" to confirm your Availability</p>\n\n<p>Best regards,<br>\nYour Team</p>",
+        "options": {}
+      },
+      "id": "eb5d551e-fd5c-4369-9dcb-080f556d955a",
+      "name": "Send Follow-Up Email to Contact",
+      "type": "n8n-nodes-base.gmail",
+      "position": [
+        -1456,
+        -64
+      ],
+      "webhookId": "0c82c299-6938-42ed-bda6-5007d79af34f",
+      "typeVersion": 2.1,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "i44jFVA4yZBUCanc",
+          "name": "LivraiFac"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 42
+      },
+      "id": "bb8bc382-a0c7-46d0-ae6e-2a44247e5396",
+      "name": "Wait for 24 Hours Before Next Action",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        -1216,
+        -64
+      ],
+      "webhookId": "7475fece-4562-46b3-a702-7a5c5fe88266",
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "resource": "thread",
+        "operation": "get",
+        "threadId": "={{ $json.threadId }}",
+        "options": {}
+      },
+      "id": "cd9a554d-1152-43ca-9d27-accc5b7a8915",
+      "name": "Retrieve Email Thread for Response",
+      "type": "n8n-nodes-base.gmail",
+      "position": [
+        -1008,
+        -64
+      ],
+      "webhookId": "ffb3a844-8c8b-4f17-a6e9-98e0371f4214",
+      "typeVersion": 2.1,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "i44jFVA4yZBUCanc",
+          "name": "LivraiFac"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "4a6d1310-29be-4559-8bea-afe8fe0f0f30",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              },
+              "leftValue": "={{ $json.messages[1].snippet }}",
+              "rightValue": "yes"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8532c4d7-eda8-4705-a3f8-dad6b56b610f",
+      "name": "Check If Contact Responded with 'Yes'",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        -800,
+        -64
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "select": "user",
+        "user": {
+          "__rl": true,
+          "mode": "list",
+          "value": "U09HMPVD466",
+          "cachedResultName": "newscctv22"
+        },
+        "text": "=⚠️ *No Response Yet - Follow-up Sent*\n\n*Contact:* {{ $json.messages[0].Subject.replace('Just Checking In - ', '') }}\n*Email:* {{ $json.messages[0].To }}\n\n*Follow-up Sent:* {{ new Date($json.messages[0].internalDate).toLocaleString() }}\n*Message:* {{ $json.messages[0].snippet }}\n\n⏳ Waiting for response... Consider next follow-up action.",
+        "otherOptions": {}
+      },
+      "id": "1f591a1c-5fde-456c-8f72-addb95be00dc",
+      "name": "Notify Sales Team in Slack if No Response",
+      "type": "n8n-nodes-base.slack",
+      "position": [
+        -480,
+        80
+      ],
+      "webhookId": "ddaa7632-9e35-4bd3-82d6-572d5cae84cc",
+      "typeVersion": 2.3
+    },
+    {
+      "parameters": {
+        "select": "user",
+        "user": {
+          "__rl": true,
+          "mode": "list",
+          "value": "U09HMPVD466",
+          "cachedResultName": "newscctv22"
+        },
+        "text": "=🎉 *Great News! We Got a Response!*\n\n*Contact:* {{ $json.messages[0].Subject.replace('Just Checking In - ', '') }}\n*Email:* {{ $json.messages[0].To }}\n\n*Their Response:*\n> {{ $json.messages[1].snippet }}\n✅ Follow-up was successful! Time to take next action.",
+        "otherOptions": {}
+      },
+      "id": "f0be821c-2add-492f-8dfc-bf797c627adf",
+      "name": "Notify Sales Team in Slack if Response Received",
+      "type": "n8n-nodes-base.slack",
+      "position": [
+        -480,
+        -272
+      ],
+      "webhookId": "ddaa7632-9e35-4bd3-82d6-572d5cae84cc",
+      "typeVersion": 2.3
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Fetch Contacts from HighLevel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Contacts from HighLevel": {
+      "main": [
+        [
+          {
+            "node": "Validate Deal Fetch Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Deal Fetch Success": {
+      "main": [
+        [
+          {
+            "node": "Filter Contacts with No Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Errors in Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Contacts with No Response": {
+      "main": [
+        [
+          {
+            "node": "Get Most Recent Contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Most Recent Contact": {
+      "main": [
+        [
+          {
+            "node": "Send Follow-Up Email to Contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Follow-Up Email to Contact": {
+      "main": [
+        [
+          {
+            "node": "Wait for 24 Hours Before Next Action",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for 24 Hours Before Next Action": {
+      "main": [
+        [
+          {
+            "node": "Retrieve Email Thread for Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve Email Thread for Response": {
+      "main": [
+        [
+          {
+            "node": "Check If Contact Responded with 'Yes'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check If Contact Responded with 'Yes'": {
+      "main": [
+        [
+          {
+            "node": "Notify Sales Team in Slack if Response Received",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Notify Sales Team in Slack if No Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "cefe56c87c60f6703897acb1b3bae1a73dcd4da3f0e70a0b95c4f459e9c6f5d9"
+  }
+}

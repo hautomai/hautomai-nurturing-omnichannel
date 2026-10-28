@@ -1,0 +1,188 @@
+@import "./theme/tokens.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-bg text-ink font-mono antialiased;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display text-ink;
+  }
+
+  /* Figures line up in tables and the KPI strip. */
+  .num,
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  ::selection {
+    background: rgba(201, 255, 74, 0.25);
+  }
+
+  /* Focus ring: the deck's 1px lime border, plus a visible ring for keyboard
+     users (§21.8). */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /*
+   * Ambient orbs + grid overlay (§21.6). Rendered once behind everything; the
+   * grid carries the deck's bottom fade so the texture dissolves rather than
+   * ending on a hard line.
+   */
+  .app-texture {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image:
+      radial-gradient(circle at 85% 10%, rgba(201, 255, 74, 0.07), transparent 30%),
+      radial-gradient(circle at 10% 95%, rgba(243, 201, 105, 0.04), transparent 28%);
+  }
+
+  .app-texture::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    background-size: 90px 90px;
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), transparent 90%);
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), transparent 90%);
+  }
+
+  /* Entrance stagger helpers, d1..d6 at 0.08s steps (§21.5). */
+  .rise {
+    animation: rise var(--rise-duration) var(--rise-ease) both;
+  }
+  .d1 {
+    animation-delay: calc(var(--stagger) * 1);
+  }
+  .d2 {
+    animation-delay: calc(var(--stagger) * 2);
+  }
+  .d3 {
+    animation-delay: calc(var(--stagger) * 3);
+  }
+  .d4 {
+    animation-delay: calc(var(--stagger) * 4);
+  }
+  .d5 {
+    animation-delay: calc(var(--stagger) * 5);
+  }
+  .d6 {
+    animation-delay: calc(var(--stagger) * 6);
+  }
+
+  /* A single live/loading indicator uses the deck's scan sweep. */
+  .scanline {
+    position: relative;
+    overflow: hidden;
+  }
+  .scanline::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 210px;
+    background: linear-gradient(90deg, transparent, rgba(201, 255, 74, 0.35), transparent);
+    animation: scan 6s linear infinite;
+  }
+
+  /* Scrollbars, so long timelines do not break the dark surface. */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(245, 243, 238, 0.18) transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: rgba(245, 243, 238, 0.18);
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * React Flow theming for the sequence canvas. The library ships its own dark
+ * defaults, but they do not speak the deck's language, so they are overridden
+ * here rather than inline in components.
+ * ------------------------------------------------------------------------ */
+.react-flow {
+  --xy-background-color: var(--bg);
+}
+
+.react-flow__attribution {
+  display: none;
+}
+
+.react-flow__edge-path {
+  stroke: rgba(245, 243, 238, 0.28);
+  stroke-width: 1.5;
+}
+
+.react-flow__edge.selected .react-flow__edge-path,
+.react-flow__edge:hover .react-flow__edge-path {
+  stroke: var(--accent);
+}
+
+.react-flow__handle {
+  width: 9px;
+  height: 9px;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+}
+
+.react-flow__handle:hover,
+.react-flow__handle-connecting {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.react-flow__controls-button {
+  background: var(--panel-2);
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  fill: var(--ink);
+}
+
+.react-flow__controls-button:hover {
+  background: #202020;
+}
+
+.react-flow__minimap {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+}
+
+.react-flow__node {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12px;
+  color: var(--ink);
+}
